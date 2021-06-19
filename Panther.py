@@ -3,17 +3,20 @@ import cv2
 cars_cascade = cv2.CascadeClassifier('haarcascade_car.xml')
 
 def detect_cars(frame):
-    cars = cars_cascade.detectMultiScale(frame, 1.15, 5)
+    cars = cars_cascade.detectMultiScale(frame, 1.15, 3)
     for (x, y, w, h) in cars:
         cv2.rectangle(frame, (x, y), (x+w,y+h), color=(0, 255, 0), thickness=2)
     return frame
 
 def Simulator(video_url=0):
-    CarVideo = cv2.VideoCapture(video_url)
+    CarVideo = cv2.VideoCapture(video_url,cv2.CAP_DSHOW)
+    CarVideo.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    CarVideo.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
     width  = CarVideo.get(3)  # float `width`
     height = CarVideo.get(4)  # float `height`
-
+    r, frame = CarVideo.read()
     print('width, height:', width, height)
+    print('Resolution: ' + str(frame.shape[0]) + ' x ' + str(frame.shape[1]))
 
     while CarVideo.isOpened():
         ret, frame = CarVideo.read()
@@ -32,4 +35,4 @@ if __name__ == '__main__':
     # for video_url.
     # Web came = 0
     # other = string
-    Simulator()
+    Simulator(1)
